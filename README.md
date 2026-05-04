@@ -22,7 +22,7 @@ FlowixPro is an AI-powered tool designed for freelancers and agencies who are ti
 ## 🏗️ System Architecture
 FlowixPro uses a sophisticated **Sequential Chaining** model to process information:
 
-![alt text](<system_architecture.png>)
+![System Architecture](system-architecture.png)
 
 **Concise Explanation:**
 *   **User Layer:** Ingests unstructured "chaos" and captures the user's specific analysis intent.
