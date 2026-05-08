@@ -15,43 +15,35 @@ FlowixPro is an AI-powered tool designed for freelancers and agencies who are ti
   - **Questions**: Strategic questions to send back to the client.
 - **🧠 Multi-Step AI Pipeline**: Uses a chain of "AI Experts" (Architect, Auditor, and PM) for superior accuracy.
 - **🛡️ Risk Mitigation**: Doesn't just find risks—it suggests professional mitigation strategies.
-- **⚡ Instant Gradio UI**: A clean, functional interface for immediate use.
+- **⚡ FastAPI Service**: Simple `/analyze` endpoint for product integration.
+
 
 ---
 
 ## 🏗️ System Architecture
-FlowixPro uses a sophisticated **Sequential Chaining** model to process information:
+FlowixPro runs as a **FastAPI** service and uses a 3-phase LangChain prompt flow:
 
 ```mermaid
 graph TD
-    subgraph UI ["1. User Interface (Gradio)"]
-        A[Messy Client Message] --> B{Analysis Mode Selection}
-    end
+    A[Client Message] --> B[FastAPI: POST /analyze]
+    B --> C[Phase 1: Architect (text)]
+    C --> D[Phase 2: Auditor (text)]
+    D --> E[Phase 3: Strategist (JSON)]
+    E --> F[Validated JSON Output (Pydantic)]
 
-    subgraph Engine ["2. AI Clarity Engine (Multi-Step Chaining)"]
-        B --> C[Step 1: Technical Architect]
-        C --> D[Step 2: Risk Auditor]
-        D --> E[Step 3: Lead Project Manager]
-    end
-
-    subgraph Output ["3. Structured Delivery (Pydantic)"]
-        E --> F[Executive Summary]
-        E --> G[Scope Boundaries]
-        E --> H[Risk & Mitigation]
-        E --> I[Smart Questions]
-    end
-
-    style UI fill:#f9f9f9,stroke:#333,stroke-width:2px
-    style Engine fill:#e1f5fe,stroke:#01579b,stroke-width:2px
-    style Output fill:#f1f8e9,stroke:#33691e,stroke-width:2px
+    style B fill:#f9f9f9,stroke:#333,stroke-width:2px
+    style C fill:#e1f5fe,stroke:#01579b,stroke-width:2px
+    style D fill:#e1f5fe,stroke:#01579b,stroke-width:2px
+    style E fill:#e1f5fe,stroke:#01579b,stroke-width:2px
+    style F fill:#f1f8e9,stroke:#33691e,stroke-width:2px
 ```
 
 ---
 
 ## 🛠️ Technology Stack
-- **LLM**: OpenAI GPT-4o-mini
-- **Orchestration**: LangChain
-- **UI**: Gradio
+- **LLM**: OpenAI `gpt-4o-mini` (default) or Groq-hosted Llama models
+- **Orchestration**: LangChain (`ChatOpenAI` + `ChatPromptTemplate`)
+- **API**: FastAPI + Uvicorn
 - **Data Validation**: Pydantic V2
 - **Environment**: Python 3.9+
 
@@ -71,14 +63,35 @@ pip install -r requirements.txt
 ```
 
 ### 3. Setup Environment Variables
-Create a `.env` file in the root directory and add your OpenAI API Key:
+Create a `.env` file in the root directory:
 ```env
 OPENAI_API_KEY=your_api_key_here
+# optional (only if using Groq)
+GROQ_API_KEY=your_groq_key_here
+
+# defaults shown in Swagger
+FLOWIX_PROVIDER=openai
+FLOWIX_MODEL=gpt-4o-mini
+FLOWIX_TEMPERATURE=0.1
 ```
 
 ### 4. Run the application
 ```bash
-python app.py
+uvicorn main:app --reload
+```
+
+### 5. Use the API
+
+- Health: `GET /health`
+- Defaults: `GET /defaults`
+- Analyze: `POST /analyze`
+
+Example request:
+
+```json
+{
+  "message": "Need an ecommerce site in 2 weeks with $200 budget"
+}
 ```
 
 ---
