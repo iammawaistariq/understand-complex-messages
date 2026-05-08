@@ -5,14 +5,40 @@ __pycache__/
 
 # Environments
 .env
+<<<<<<< HEAD
 .venv
 venv/
 ENV/
 env/
+=======
+env
+env/
+venv/
+.venv/
+ENV/
+env.bak/
+venv.bak/
+
+# Distribution / packaging
+dist/
+build/
+*.egg-info/
+.eggs/
+
+# OS generated files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+>>>>>>> main
 
 # IDEs
 .vscode/
 .idea/
+<<<<<<< HEAD
 
 # OS files
 .DS_Store
@@ -20,3 +46,5 @@ Thumbs.db
 
 .gradio
 Report/*
+=======
+>>>>>>> main
